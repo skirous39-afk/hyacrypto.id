@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HyaCrypto | Analisis dan Berita</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0f14;--pn:#14171f;--ln:#232733;--mut:#8a90a2;--ac:#f0b429;--g:#22c55e;--r:#ef4444;--bs-body-bg:#0d0f14;--bs-body-font-family:Inter,system-ui,sans-serif;--bs-border-color:#232733}
+body{font-size:14px}
+.pn{background:var(--pn);border:1px solid var(--ln);border-radius:10px}
+.mut{color:var(--mut)}.g{color:var(--g)}.r{color:var(--r)}
+h4,h5{font-weight:600}
+a{color:var(--ac)}
+#top{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--ln);height:54px;display:flex;align-items:center;gap:12px;padding:0 14px}
+#burger{background:none;border:0;padding:6px;display:grid;gap:5px}
+#burger i{display:block;width:22px;height:2px;background:#e6e8ee;border-radius:2px;transition:.25s}
+#burger.x i:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#burger.x i:nth-child(2){opacity:0}
+#burger.x i:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.brand{font-weight:700;font-size:17px}.brand span{color:var(--ac)}
+#side{overflow-y:auto;position:fixed;inset:0 auto 0 0;width:260px;background:var(--pn);border-right:1px solid var(--ln);z-index:100;transform:translateX(-100%);transition:transform .28s ease;display:flex;flex-direction:column;padding:16px 10px}
+#side.open{transform:none}
+#ov{position:fixed;inset:0;background:#000a;z-index:90;opacity:0;pointer-events:none;transition:opacity .28s}
+#ov.open{opacity:1;pointer-events:auto}
+.nv{display:block;padding:10px 12px;border-radius:8px;color:#cfd3df;text-decoration:none;border-left:3px solid transparent}
+.nv:hover{background:#1b1f2b}.nv.on{background:#1b1f2b;border-left-color:var(--ac);color:#fff;font-weight:600}
+.pg{display:none}.pg.on{display:block;animation:fi .25s}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--g);margin-right:6px;animation:pl 1.6s infinite}
+@keyframes pl{50%{opacity:.3}}
+.tick{border-bottom:1px solid var(--ln);min-height:46px}
+.table{--bs-table-bg:transparent;margin:0}
+tbody tr{cursor:pointer}
+.up{animation:fu .8s}.dn{animation:fd .8s}
+@keyframes fu{from{background:#22c55e44}}@keyframes fd{from{background:#ef444444}}
+.coin{width:22px;height:22px;margin-right:8px;border-radius:50%;vertical-align:middle}
+.star{cursor:pointer;color:#444}.star.on{color:var(--ac)}
+.tbox{max-height:620px;overflow:auto}
+.chip{background:none;border:1px solid var(--ln);color:#aab;border-radius:6px;padding:5px 12px;font-size:13px}
+.chip.on{background:var(--ac);color:#111;border-color:var(--ac);font-weight:600}
+.stat b{font-size:20px}
+#hm{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:6px}
+.tile{padding:8px;border-radius:6px;cursor:pointer;display:flex;flex-direction:column;font-size:12px;transition:transform .15s}.tile:hover{transform:scale(1.05)}
+.nw{border-bottom:1px solid var(--ln);padding:11px 2px}.nw:last-child{border:0}
+.nw a{color:#e6e8ee;text-decoration:none;font-weight:500}.nw a:hover{color:var(--ac)}
+details.pn{padding:12px 14px;margin-bottom:8px}summary{cursor:pointer;font-weight:600}
+#toasts{position:fixed;top:64px;right:12px;z-index:3000;display:grid;gap:8px}
+.tt{background:#1b1f2b;border-left:3px solid var(--ac);padding:10px 14px;border-radius:8px;animation:fi .3s}
+/* chat */
+#fab{position:fixed;right:16px;bottom:16px;z-index:2000;border:0;border-radius:999px;padding:12px 20px;background:var(--ac);color:#111;font-weight:600;box-shadow:0 6px 20px #0008;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-4px)}}
+#chat{position:fixed;right:16px;bottom:16px;z-index:2001;width:min(390px,94vw);height:min(580px,78vh);display:flex;flex-direction:column;overflow:hidden;transform:translateY(20px) scale(.96);opacity:0;pointer-events:none;transform-origin:bottom right;transition:.25s}
+#chat.open{transform:none;opacity:1;pointer-events:auto}
+#msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.mm{max-width:88%;padding:8px 12px;border-radius:12px;line-height:1.5;word-wrap:break-word;animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.97)}}
+.mm.b{background:#1c2030;align-self:flex-start;border-bottom-left-radius:3px}
+.mm.u{background:var(--ac);color:#111;align-self:flex-end;border-bottom-right-radius:3px}
+.ty i{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:var(--mut);animation:tb 1s infinite}
+.ty i:nth-child(2){animation-delay:.15s}.ty i:nth-child(3){animation-delay:.3s}
+@keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
+.qc{display:flex;gap:6px;overflow-x:auto;padding:6px 10px}
+.qc button{flex:none;border:1px solid var(--ln);background:none;color:#cfd3df;border-radius:6px;padding:4px 10px;font-size:12px}
+.qc button:hover{border-color:var(--ac)}
+.skiptranslate iframe,.goog-te-banner-frame{display:none!important}body{top:0!important}
+.ch{border:1px solid var(--ln);background:none;color:#cfd3df;border-radius:6px;padding:3px 9px;font-size:12px;margin:6px 6px 0 0}.ch:hover{border-color:var(--ac)}
+</style>
+</head>
+<body>
+
+<div id="ov"></div>
+<nav id="side">
+  <div class="brand px-2 mb-3">Hya<span>Crypto</span><div class="mut" style="font-size:12px;font-weight:400">Analisis dan Berita</div></div>
+  <a class="nv" data-p="home" href="#home">Beranda</a>
+  <a class="nv" data-p="pasar" href="#pasar">Pasar</a>
+  <a class="nv" data-p="chart" href="#chart">Chart &amp; Analisis</a>
+  <a class="nv" data-p="kalk" href="#kalk">Kalkulator</a>
+  <a class="nv" data-p="scan" href="#scan">Pemindai Sinyal</a>
+  <a class="nv" data-p="fut" href="#fut">Futures</a>
+  <a class="nv" data-p="berita" href="#berita">Berita</a>
+  <a class="nv" data-p="kal" href="#kal">Kalender Ekonomi</a>
+  <a class="nv" data-p="edu" href="#edu">Edukasi</a>
+  <a class="nv" data-p="bahasa" href="#bahasa">Bahasa</a>
+  <div class="mt-auto px-2 small mut">
+    <a href="https://www.instagram.com/hyacrypto?igsh=MTg5d3dqeXZ0NGxpZQ==" target="_blank" rel="noopener">Instagram @hyacrypto</a>
+    <div class="mt-2">Investasi crypto berisiko tinggi. Bukan saran keuangan.</div>
+  </div>
+</nav>
+
+<div id="top">
+  <button id="burger" aria-label="Menu"><i></i><i></i><i></i></button>
+  <div class="brand">Hya<span>Crypto</span> <span class="mut d-none d-sm-inline" style="font-weight:400;font-size:13px">Analisis dan Berita</span></div>
+  <a href="#bahasa" class="chip text-decoration-none ms-auto notranslate" id="langBtn">ID</a><div class="small mut"><span class="dot"></span><span id="sSt">Menghubungkan</span> <span id="clock" class="d-none d-sm-inline"></span></div>
+</div>
+<div class="tick"><div class="tradingview-widget-container">
+<script src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+{"symbols":[{"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"BINANCE:SOLUSDT","title":"SOL"},{"proName":"BINANCE:XRPUSDT","title":"XRP"},{"proName":"OANDA:XAUUSD","title":"Emas"},{"proName":"OANDA:EURUSD","title":"EUR/USD"}],"colorTheme":"dark","displayMode":"adaptive","locale":"id"}
+</script></div></div>
+
+<main class="container py-4" style="max-width:1100px">
+
+<!-- BERANDA -->
+<section class="pg" id="p-home">
+  <div class="row g-3 text-center mb-3">
+    <div class="col-6 col-md-3"><div class="pn p-3 stat"><div class="mut small">Total Market Cap</div><b id="sCap">-</b><div id="sChg" class="small"></div></div></div>
+    <div class="col-6 col-md-3"><div class="pn p-3 stat"><div class="mut small">Dominasi BTC</div><b id="sDom">-</b></div></div>
+    <div class="col-6 col-md-3"><div class="pn p-3 stat"><div class="mut small">Fear &amp; Greed</div><b id="sFng">-</b><div id="sFngT" class="small mut"></div></div></div>
+    <div class="col-6 col-md-3"><div class="pn p-3 stat"><div class="mut small">Aset Dipantau</div><b id="sN">-</b></div></div>
+  </div>
+  <div class="pn p-3 mb-3"><h5>Ringkasan Pasar</h5><p id="brief" class="mb-0 mut">Memuat data pasar...</p></div>
+  <div class="pn p-3 mb-3"><h5>Peta Pasar 24 Jam</h5><div id="hm"></div></div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-6"><div class="pn p-3 h-100"><h5>Top Gainer</h5><div id="hG"></div></div></div>
+    <div class="col-md-6"><div class="pn p-3 h-100"><h5>Top Loser</h5><div id="hL"></div></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-md-7"><div class="pn p-3 h-100"><h5>Fear &amp; Greed 30 Hari</h5><div id="fgH" style="display:flex;align-items:flex-end;gap:3px;height:90px"></div><small class="mut">Merah = takut, hijau = serakah. Bar paling kanan adalah hari ini.</small></div></div>
+    <div class="col-md-5"><div class="pn p-3 h-100"><h5>Jaringan Bitcoin</h5><div id="btcNet" class="small">Memuat...</div></div></div>
+  </div>
+  <div class="pn p-3 mb-3"><h5>Sedang Trending</h5><div id="trend" class="d-flex flex-wrap gap-2"></div></div>
+  <div class="pn px-3 pt-3 pb-1"><div class="d-flex justify-content-between"><h5>Berita Terbaru</h5><a href="#berita" class="small">Semua berita</a></div><div id="hN"></div></div>
+</section>
+
+<!-- PASAR -->
+<section class="pg" id="p-pasar">
+  <h4 class="mb-3">Pasar</h4>
+  <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <input id="search" class="form-control" style="max-width:260px" placeholder="Cari nama atau simbol">
+    <button class="chip on" data-m="all">Semua</button><button class="chip" data-m="wl">Watchlist</button>
+    <button class="chip" data-m="up">Gainer</button><button class="chip" data-m="dn">Loser</button>
+  </div>
+  <div class="pn tbox"><table class="table table-hover align-middle"><thead><tr><th></th><th>#</th><th>Aset</th><th class="text-end">Harga</th><th class="text-end">24J</th><th class="text-end d-none d-md-table-cell">Market Cap</th></tr></thead><tbody id="tb"></tbody></table></div>
+  <button id="more" class="btn btn-outline-secondary w-100 mt-2">Tampilkan lebih banyak</button>
+</section>
+
+<!-- CHART -->
+<section class="pg" id="p-chart">
+  <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <h4 class="mb-0 me-2">Chart &amp; Analisis <span id="cLbl" class="mut fs-6"></span></h4>
+    <input id="cSym" class="form-control" style="width:110px" placeholder="Simbol">
+    <button id="cGo" class="btn btn-outline-warning">Buka</button>
+  </div>
+  <div class="row g-3">
+    <div class="col-lg-8"><div id="tv_chart" class="pn" style="height:500px"></div><div id="tvGauge" class="pn mt-3" style="height:420px"></div></div>
+    <div class="col-lg-4"><div class="pn p-3">
+      <div class="d-flex justify-content-between align-items-center"><h5 class="mb-0">Analisis Teknikal</h5>
+      <select id="tf" class="form-select form-select-sm w-auto"><option>15m</option><option selected>1h</option><option>4h</option><option>1d</option></select></div>
+      <ul id="aiList" class="mt-3 mb-2 ps-3 small"></ul>
+      <small class="mut">Dihitung dari RSI, EMA, MACD, ATR. Bukan saran investasi.</small>
+      <h6 class="mt-3">Ringkasan Multi-Timeframe</h6><div id="mtf" class="small"></div>
+      <h6 class="mt-3">Level Fibonacci (48 candle)</h6><div id="fibB" class="small"></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- PEMINDAI -->
+<section class="pg" id="p-scan">
+  <div class="d-flex flex-wrap gap-2 align-items-center mb-3"><h4 class="mb-0 me-2">Pemindai Sinyal</h4>
+    <select id="scTf" class="form-select" style="width:90px"><option>15m</option><option selected>1h</option><option>4h</option><option>1d</option></select>
+    <select id="scF" class="form-select" style="width:160px"><option value="">Semua sinyal</option><option value="bull">Bullish</option><option value="bear">Bearish</option><option value="os">RSI jenuh jual</option><option value="ob">RSI jenuh beli</option></select>
+    <button id="scGo" class="btn btn-warning">Pindai 30 Koin</button><small id="scSt" class="mut"></small></div>
+  <div class="pn table-responsive"><table class="table align-middle"><thead><tr><th>Aset</th><th>Sentimen</th><th class="text-end">RSI</th><th class="text-end">Harga</th><th class="text-end">Support</th><th class="text-end">Resistance</th></tr></thead><tbody id="scTb"></tbody></table></div>
+  <small class="mut">Memindai 30 koin teratas berdasarkan market cap. Dihitung dari indikator, bukan saran investasi. Klik baris untuk membuka chart.</small>
+</section>
+
+<!-- FUTURES -->
+<section class="pg" id="p-fut">
+  <h4 class="mb-1">Futures: Funding Rate &amp; Open Interest</h4>
+  <p class="mut small">Funding positif besar berarti posisi long ramai (rawan long squeeze), negatif besar berarti short ramai. Diurutkan dari open interest terbesar. Data: Bybit perpetual.</p>
+  <div id="lsr" class="row g-3 mb-3 text-center"></div>
+  <div class="pn table-responsive tbox"><table class="table align-middle"><thead><tr><th>Kontrak</th><th class="text-end">Harga</th><th class="text-end">24J</th><th class="text-end">Funding</th><th class="text-end">Open Interest</th></tr></thead><tbody id="fuTb"></tbody></table></div>
+</section>
+
+<!-- KALENDER -->
+<section class="pg" id="p-kal">
+  <h4 class="mb-3">Kalender Ekonomi</h4>
+  <div class="pn p-2" id="kalBox" style="height:620px"></div>
+  <small class="mut">Rilis data seperti CPI dan keputusan suku bunga The Fed sering menggerakkan pasar crypto.</small>
+</section>
+
+<!-- KALKULATOR -->
+<section class="pg" id="p-kalk">
+  <h4 class="mb-3">Kalkulator</h4>
+  <div class="row g-3">
+    <div class="col-md-6"><div class="pn p-3 h-100"><h5>Risiko &amp; Ukuran Posisi</h5><div class="row g-2">
+      <div class="col-6"><label class="small mut">Modal ($)</label><input id="cBal" class="form-control" type="number" value="1000"></div>
+      <div class="col-6"><label class="small mut">Risiko per trade (%)</label><input id="cRisk" class="form-control" type="number" value="1" step="0.1"></div>
+      <div class="col-6"><label class="small mut">Entry ($)</label><input id="cEnt" class="form-control" type="number" step="any"></div>
+      <div class="col-6"><label class="small mut">Stop loss ($)</label><input id="cSl" class="form-control" type="number" step="any"></div></div><div id="cOut" class="mt-3 small"></div></div></div>
+    <div class="col-md-6"><div class="pn p-3 h-100"><h5>Profit / Loss</h5><div class="row g-2">
+      <div class="col-6"><label class="small mut">Entry ($)</label><input id="lEnt" class="form-control" type="number" step="any"></div>
+      <div class="col-6"><label class="small mut">Exit ($)</label><input id="lEx" class="form-control" type="number" step="any"></div>
+      <div class="col-4"><label class="small mut">Modal ($)</label><input id="lBal" class="form-control" type="number" value="100"></div>
+      <div class="col-4"><label class="small mut">Leverage</label><input id="lLev" class="form-control" type="number" value="1"></div>
+      <div class="col-4"><label class="small mut">Arah</label><select id="lDir" class="form-select"><option value="1">Long</option><option value="-1">Short</option></select></div></div><div id="lOut" class="mt-3 small"></div></div></div>
+    <div class="col-12"><div class="pn p-3"><h5>Konverter Koin ke USD &amp; Rupiah</h5><div class="d-flex gap-2 flex-wrap">
+      <input id="vA" class="form-control" style="width:140px" type="number" step="any" value="1"><input id="vS" class="form-control" style="width:110px" value="BTC">
+      <div id="vOut" class="align-self-center"></div></div><small class="mut">Kurs USD/IDR: <span id="fxv">-</span></small></div></div>
+  </div>
+</section>
+
+<!-- BERITA -->
+<section class="pg" id="p-berita">
+  <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <h4 class="mb-0 me-2">Berita</h4>
+    <input id="nQ" class="form-control" style="max-width:240px" placeholder="Cari berita">
+    <select id="nS" class="form-select" style="max-width:180px"><option value="">Semua sumber</option></select>
+    <small class="mut ms-auto"><span class="dot"></span><span id="newsUpd">-</span>, refresh tiap 60 detik</small>
+  </div>
+  <div id="newsList" class="pn px-3"></div>
+</section>
+
+<!-- EDUKASI -->
+<section class="pg" id="p-edu"><h4 class="mb-3">Edukasi</h4><div id="eduBox"></div></section>
+
+<!-- BAHASA -->
+<section class="pg" id="p-bahasa">
+  <h4 class="mb-1">Bahasa</h4>
+  <p class="mut small">Seluruh halaman, termasuk chat, diterjemahkan otomatis oleh Google Translate. Daftar diurutkan A-Z menurut nama negara.</p>
+  <div class="d-flex gap-2 mb-3"><input id="lgQ" class="form-control" placeholder="Cari negara atau bahasa"><button id="lgReset" class="btn btn-outline-warning text-nowrap">Indonesia (asli)</button></div>
+  <div id="lgList" class="pn tbox notranslate" style="max-height:640px"></div>
+</section>
+<div id="gtEl" class="notranslate" style="position:absolute;left:-9999px;top:0;height:0;overflow:hidden"></div>
+
+</main>
+
+<footer class="text-center py-4 small mut" style="border-top:1px solid var(--ln)">
+  2026 HyaCrypto Analisis dan Berita. Data: Binance, Bybit, OKX, CoinGecko, CryptoCompare, alternative.me.
+</footer>
+
+<div id="toasts"></div>
+<button id="fab">Tanya Asisten</button>
+<div id="chat" class="pn">
+  <div class="d-flex justify-content-between align-items-center px-3 py-2" style="border-bottom:1px solid var(--ln)">
+    <b>Asisten HyaCrypto</b><span><button id="cc" class="btn btn-sm">Hapus</button><button id="cx" class="btn btn-sm">Tutup</button></span></div>
+  <div id="msgs"></div>
+  <div class="qc" id="qc"></div>
+  <form id="cf" class="d-flex gap-2 p-2" autocomplete="off"><input id="ci" class="form-control" placeholder="Tulis pertanyaan"><button type="button" id="mic" class="btn btn-outline-secondary">Mic</button><button class="btn btn-warning">Kirim</button></form>
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+<script>
+const AI_ENDPOINT=""; // opsional: URL backend LLM kamu. POST {message,context} -> {reply}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ls=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}};
+const fmt=n=>n>=1?n.toLocaleString("en-US",{maximumFractionDigits:2}):Number(n).toPrecision(4);
+const pc=n=>`<span class="${n>=0?'g':'r'}">${n>=0?'+':''}${n.toFixed(2)}%</span>`;
+const coins=new Map();
+let kalOk=0,scanRes=[],cur="home",sel="BTC",chartSym=null,mode="all",shown=50,last=null,fx=16000,news=[],fng=null,glob=null;
+let wl=new Set(ls("wl")||[]);
+const list=()=>[...coins].filter(([s,c])=>c.name&&c.price!=null);
+function toast(t){const d=document.createElement("div");d.className="tt";d.textContent=t;$("toasts").appendChild(d);setTimeout(()=>d.remove(),7000)}
+setInterval(()=>$("clock").textContent=new Date().toLocaleTimeString("id-ID",{timeZone:"Asia/Jakarta"})+" WIB",1000);
+
+/* ===== NAV ===== */
+function side(o){$("side").classList.toggle("open",o);$("ov").classList.toggle("open",o);$("burger").classList.toggle("x",o)}
+$("burger").onclick=()=>side(!$("side").classList.contains("open"));$("ov").onclick=()=>side(false);
+function go(p){if(!$("p-"+p))p="home";cur=p;
+ document.querySelectorAll(".pg").forEach(e=>e.classList.toggle("on",e.id==="p-"+p));
+ document.querySelectorAll(".nv").forEach(e=>e.classList.toggle("on",e.dataset.p===p));
+ side(false);window.scrollTo(0,0);if(p==="chart")showChart();if(p==="fut")loadFut();if(p==="bahasa")rLang();if(p==="kal"&&!kalOk){kalOk=1;tvw($("kalBox"),"embed-widget-events.js",{colorTheme:"dark",isTransparent:true,width:"100%",height:"100%",locale:"id",importanceFilter:"-1,0,1",currencyFilter:"USD"})}tick()}
+window.onhashchange=()=>go(location.hash.slice(1)||"home");
+function pick(s){sel=s;go("chart");history.replaceState(null,"","#chart");const p=coins.get(s)?.price;if(p){$("cEnt").value=p;$("lEnt").value=p;calc();pl()}}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-s]");if(t&&t.dataset.s){pick(t.dataset.s);if(t.closest("#chat"))$("cx").click()}});
+
+/* ===== MARKET DATA ===== */
+async function loadMeta(){
+ for(let pg=1;pg<=2;pg++){
+  try{const d=await (await fetch(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${pg}`)).json();
+   d.forEach(c=>{const s=c.symbol.toUpperCase(),o=coins.get(s)||{};
+    if(o.rank&&o.rank<c.market_cap_rank)return;
+    Object.assign(o,{name:c.name,img:c.image,cap:c.market_cap,rank:c.market_cap_rank});
+    if(o.price==null||Date.now()-(o.wt||0)>15000){o.price=c.current_price;o.change=c.price_change_percentage_24h||0}
+    coins.set(s,o)});tick()}catch(e){}
+  if(pg<2)await new Promise(r=>setTimeout(r,1500));
+ }
+ $("sN").textContent=coins.size;
+}
+let wsT=0;
+function upd(s,p,ch){const o=coins.get(s);if(!o||!(p>0))return;o.dir=p>o.price?"up":p<o.price?"dn":"";o.price=p;o.change=ch;o.wt=Date.now()}
+function connectWS(){
+ let ws;try{ws=new WebSocket("wss://stream.binance.com:9443/ws/!miniTicker@arr")}catch(e){return}
+ ws.onmessage=ev=>{wsT=Date.now();JSON.parse(ev.data).forEach(t=>{if(t.s.endsWith("USDT"))upd(t.s.slice(0,-4),+t.c,(t.c-t.o)/t.o*100)})};
+ ws.onclose=()=>setTimeout(connectWS,10000);ws.onerror=()=>ws.close();
+}
+async function pollLive(){
+ if(Date.now()-wsT<8000){$("sSt").textContent="Live";return}
+ let ok=false;
+ try{const j=await (await fetch("https://www.okx.com/api/v5/market/tickers?instType=SPOT")).json();
+  j.data.forEach(t=>{if(t.instId.endsWith("-USDT"))upd(t.instId.slice(0,-5),+t.last,(t.last-t.open24h)/t.open24h*100)});ok=j.data.length>0}catch(e){}
+ if(!ok)try{const j=await (await fetch("https://api.bybit.com/v5/market/tickers?category=spot")).json();
+  j.result.list.forEach(t=>{if(t.symbol.endsWith("USDT"))upd(t.symbol.slice(0,-4),+t.lastPrice,t.price24hPcnt*100)});ok=true}catch(e){}
+ $("sSt").textContent=ok?"Live":"Data tertunda";
+}
+function tick(){
+ if(cur==="home")rHome();if(cur==="pasar")rMarket();
+ coins.forEach(c=>c.dir="");
+}
+setInterval(tick,1500);
+
+function rMarket(){
+ const q=$("search").value.trim().toLowerCase();let a=list();
+ if(mode==="wl")a=a.filter(([s])=>wl.has(s));
+ if(q)a=a.filter(([s,c])=>s.toLowerCase().includes(q)||c.name.toLowerCase().includes(q));
+ if(mode==="up")a.sort((x,y)=>y[1].change-x[1].change);else if(mode==="dn")a.sort((x,y)=>x[1].change-y[1].change);else a.sort((x,y)=>x[1].rank-y[1].rank);
+ $("more").style.display=a.length>shown?"":"none";
+ $("tb").innerHTML=a.slice(0,shown).map(([s,c],i)=>`<tr data-s="${esc(s)}" class="${c.dir||''}">
+ <td><span class="star ${wl.has(s)?'on':''}" onclick="event.stopPropagation();star('${esc(s)}')">&#9733;</span></td><td>${i+1}</td>
+ <td><img class="coin" src="${esc(c.img)}" alt="">${esc(c.name)} <span class="mut">${esc(s)}</span></td>
+ <td class="text-end">$${fmt(c.price)}</td><td class="text-end">${pc(c.change)}</td>
+ <td class="text-end d-none d-md-table-cell">$${(c.cap||0).toLocaleString("en-US")}</td></tr>`).join("")||'<tr><td colspan="6" class="mut text-center py-4">Tidak ada data</td></tr>';
+}
+function star(s){wl.has(s)?wl.delete(s):wl.add(s);ls("wl",[...wl]);rMarket()}
+document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{mode=b.dataset.m;shown=50;document.querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x===b));rMarket()});
+$("search").oninput=()=>{shown=50;rMarket()};$("more").onclick=()=>{shown+=50;rMarket()};
+
+function rHome(){rBrief();
+ const a=list().sort((x,y)=>x[1].rank-y[1].rank);
+ $("hm").innerHTML=a.slice(0,40).map(([s,c])=>`<div class="tile" data-s="${esc(s)}" style="background:rgba(${c.change>=0?'34,197,94':'239,68,68'},${Math.min(.85,.18+Math.abs(c.change)/12)})"><b>${esc(s)}</b><span>${c.change>=0?'+':''}${c.change.toFixed(1)}%</span></div>`).join("");
+ const row=([s,c])=>`<div class="d-flex justify-content-between py-1" data-s="${esc(s)}" style="cursor:pointer"><span>${esc(s)} <span class="mut">$${fmt(c.price)}</span></span>${pc(c.change)}</div>`;
+ const big=a.filter(([s,c])=>c.rank<=100).sort((x,y)=>y[1].change-x[1].change);
+ $("hG").innerHTML=big.slice(0,6).map(row).join("");$("hL").innerHTML=big.slice(-6).reverse().map(row).join("");
+}
+
+/* ===== CHART & TA ===== */
+function loadChart(s){$("tv_chart").innerHTML="";new TradingView.widget({autosize:true,symbol:"BINANCE:"+s+"USDT",interval:"60",timezone:"Asia/Jakarta",theme:"dark",locale:"id",container_id:"tv_chart",allow_symbol_change:true})}
+function showChart(){if(chartSym!==sel){loadChart(sel);chartSym=sel;tvw($("tvGauge"),"embed-widget-technical-analysis.js",{interval:"1h",width:"100%",height:"100%",isTransparent:true,symbol:"BINANCE:"+sel+"USDT",showIntervalTabs:true,locale:"id",colorTheme:"dark"})}$("cLbl").textContent=sel+"/USDT";showTA()}
+$("cGo").onclick=()=>{const s=$("cSym").value.trim().toUpperCase();if(s){sel=s;showChart()}};
+const emaA=(a,n)=>{const k=2/(n+1);let e=a[0];return a.map((v,i)=>i?(e=v*k+e*(1-k)):e)};
+function rsi(a,n=14){let g=0,l=0;for(let i=a.length-n;i<a.length;i++){const d=a[i]-a[i-1];d>0?g+=d:l-=d}return l===0?100:100-100/(1+g/l)}
+async function candles(s,tf){
+ const m={"15m":["15m","15","15m"],"1h":["1h","60","1H"],"4h":["4h","240","4H"],"1d":["1d","D","1D"]}[tf];
+ const T=(u,f)=>fetch(u).then(r=>r.json()).then(f).catch(()=>null);
+ const ok=k=>Array.isArray(k)&&k.length>60?k:null;
+ return ok(await T(`https://api.binance.com/api/v3/klines?symbol=${s}USDT&interval=${m[0]}&limit=200`,k=>k.map(x=>[+x[1],+x[2],+x[3],+x[4]])))
+  ||ok(await T(`https://api.bybit.com/v5/market/kline?category=spot&symbol=${s}USDT&interval=${m[1]}&limit=200`,j=>j.result.list.reverse().map(x=>[+x[1],+x[2],+x[3],+x[4]])))
+  ||ok(await T(`https://www.okx.com/api/v5/market/candles?instId=${s}-USDT&bar=${m[2]}&limit=200`,j=>j.data.reverse().map(x=>[+x[1],+x[2],+x[3],+x[4]])));
+}
+const taC={};
+async function TA(s,tf="1h"){
+ const key=s+tf;if(taC[key]&&Date.now()-taC[key].t<60000)return taC[key].v;
+ const k=await candles(s,tf);if(!k)throw new Error("nodata");
+ const c=k.map(x=>x[3]),p=c.at(-1),e20=emaA(c,20).at(-1),e50=emaA(c,50).at(-1),R=rsi(c);
+ const e12=emaA(c,12),e26=emaA(c,26),m=e12.map((v,i)=>v-e26[i]),h=m.at(-1)-emaA(m,9).at(-1);
+ const w=k.slice(-48),sup=Math.min(...w.map(x=>x[2])),res=Math.max(...w.map(x=>x[1]));
+ const atr=k.slice(-14).reduce((t,x)=>t+(x[1]-x[2]),0)/14,sc=(p>e20?1:-1)+(e20>e50?1:-1)+(R>55?1:R<45?-1:0)+(h>0?1:-1);
+ const lab=sc>=3?"Bullish kuat":sc>=1?"Bullish":sc===0?"Sideways":sc>=-2?"Bearish":"Bearish kuat",risk=1.5*atr;
+ const v={s,tf,p,e20,e50,R,h,sup,res,atr,sc,lab,stop:p-risk,tp1:p+2*risk,tp2:p+3*risk};taC[key]={t:Date.now(),v};return v;
+}
+function taHTML(a){
+ const rn=a.R>70?" (jenuh beli)":a.R<30?" (jenuh jual)":"";
+ return `<li>Sentimen: <b class="${a.sc>0?'g':a.sc<0?'r':''}">${a.lab}</b> (skor ${a.sc} dari 4)</li><li>Harga: <b>$${fmt(a.p)}</b></li>
+ <li>EMA20 / EMA50: <b>$${fmt(a.e20)}</b> / <b>$${fmt(a.e50)}</b></li><li>RSI 14: <b>${a.R.toFixed(1)}</b>${rn}</li>
+ <li>MACD histogram: <b class="${a.h>0?'g':'r'}">${a.h>0?'positif':'negatif'}</b></li>
+ <li>Support / Resistance: <b>$${fmt(a.sup)}</b> / <b>$${fmt(a.res)}</b></li>
+ <li>${a.sc>=1?`Ide setup long: SL <b>$${fmt(a.stop)}</b>, TP1 <b>$${fmt(a.tp1)}</b>, TP2 <b>$${fmt(a.tp2)}</b> (RR 1:2 dan 1:3)`:`Belum ada setup long yang jelas. Tunggu close di atas EMA20 atau resistance <b>$${fmt(a.res)}</b>, atau reaksi di support <b>$${fmt(a.sup)}</b>.`}</li>`;
+}
+async function showTA(){$("aiList").innerHTML="<li>Memuat data...</li>";
+ try{const a=await TA(sel,$("tf").value);$("aiList").innerHTML=taHTML(a);
+  $("fibB").innerHTML=[.236,.382,.5,.618,.786].map(f=>`<div class="d-flex justify-content-between"><span class="mut">${f}</span><b>$${fmt(a.res-(a.res-a.sup)*f)}</b></div>`).join("")}
+ catch(e){$("aiList").innerHTML=`<li>Data harga ${esc(sel)} tidak bisa diambil dari Binance, Bybit, maupun OKX. Pastikan simbol benar dan koin punya pasar USDT.</li>`;$("fibB").innerHTML=""}
+ mtf();}
+async function mtf(){const r=await Promise.all(["15m","1h","4h","1d"].map(t=>TA(sel,t).then(a=>`<div class="d-flex justify-content-between"><span class="mut">${t}</span><b class="${a.sc>0?'g':a.sc<0?'r':''}">${a.lab}</b><span>RSI ${a.R.toFixed(0)}</span></div>`).catch(()=>`<div class="d-flex justify-content-between"><span class="mut">${t}</span><span class="mut">tidak tersedia</span></div>`)));$("mtf").innerHTML=r.join("")}
+$("tf").onchange=showTA;setInterval(()=>{if(cur==="chart")showTA()},60000);
+
+/* ===== KALKULATOR ===== */
+function calc(){const b=+$("cBal").value,r=+$("cRisk").value,e=+$("cEnt").value,s=+$("cSl").value;
+ if(!(b>0&&r>0&&e>0&&s>0&&e!==s)){$("cOut").innerHTML='<span class="mut">Isi semua kolom (entry tidak sama dengan stop loss).</span>';return}
+ const risk=b*r/100,d=Math.abs(e-s),q=risk/d,dir=e>s?1:-1;
+ $("cOut").innerHTML=`Arah: <b>${dir>0?'Long':'Short'}</b><br>Risiko maksimal: <b class="r">$${risk.toFixed(2)}</b><br>Ukuran posisi: <b>${fmt(q)}</b> koin ($${(q*e).toFixed(2)})<br>TP 1:2: <b class="g">$${fmt(e+dir*2*d)}</b>, TP 1:3: <b class="g">$${fmt(e+dir*3*d)}</b><br>Leverage minimal: <b>${Math.max(1,q*e/b).toFixed(1)}x</b>`}
+function pl(){const e=+$("lEnt").value,x=+$("lEx").value,b=+$("lBal").value,l=+$("lLev").value,d=+$("lDir").value;
+ if(!(e>0&&x>0&&b>0&&l>0)){$("lOut").innerHTML='<span class="mut">Isi entry, exit, modal, dan leverage.</span>';return}
+ const p=(x-e)/e*l*d*100;$("lOut").innerHTML=`Hasil: <b class="${p>=0?'g':'r'}">${p.toFixed(2)}%</b> = <b class="${p>=0?'g':'r'}">$${(b*p/100).toFixed(2)}</b><br>Saldo akhir: <b>$${(b+b*p/100).toFixed(2)}</b>${p<=-100?'<br><span class="r">Posisi likuidasi.</span>':''}`}
+function conv(){const c=coins.get($("vS").value.trim().toUpperCase()),a=+$("vA").value;
+ $("vOut").innerHTML=c&&a?`<b>$${fmt(a*c.price)}</b> atau <b>Rp${Math.round(a*c.price*fx).toLocaleString("id-ID")}</b>`:'<span class="mut">Simbol tidak ditemukan</span>'}
+["cBal","cRisk","cEnt","cSl"].forEach(i=>$(i).oninput=calc);["lEnt","lEx","lBal","lLev","lDir"].forEach(i=>$(i).oninput=pl);["vA","vS"].forEach(i=>$(i).oninput=conv);
+setInterval(()=>{if(cur==="kalk")conv()},1500);calc();pl();
+async function loadFx(){try{fx=(await (await fetch("https://open.er-api.com/v6/latest/USD")).json()).rates.IDR;$("fxv").textContent="Rp"+Math.round(fx).toLocaleString("id-ID")}catch(e){$("fxv").textContent="perkiraan Rp"+fx.toLocaleString("id-ID")}}
+
+/* ===== GLOBAL & FNG ===== */
+async function loadGlobal(){try{const d=(await (await fetch("https://api.coingecko.com/api/v3/global")).json()).data;glob=d;
+ $("sCap").textContent="$"+(d.total_market_cap.usd/1e12).toFixed(2)+"T";const c=d.market_cap_change_percentage_24h_usd;
+ $("sChg").innerHTML=pc(c)+" 24J";$("sDom").textContent=d.market_cap_percentage.btc.toFixed(1)+"%"}catch(e){}}
+async function loadFng(){try{fng=(await (await fetch("https://api.alternative.me/fng/")).json()).data[0];$("sFng").textContent=fng.value;$("sFng").className=+fng.value>=50?"g":"r";$("sFngT").textContent=fng.value_classification}catch(e){}}
+
+/* ===== BERITA ===== */
+const RSS=["https://www.coindesk.com/arc/outboundfeeds/rss/","https://cointelegraph.com/rss","https://decrypt.co/feed"];
+const ago=ts=>{const s=Math.max(0,(Date.now()-ts)/1000);return s<60?~~s+" dtk":s<3600?~~(s/60)+" mnt":s<86400?~~(s/3600)+" jam":~~(s/86400)+" hari"};
+async function loadNews(){
+ const jobs=[fetch("https://min-api.cryptocompare.com/data/v2/news/?lang=EN").then(r=>r.json()).then(d=>d.Data.map(n=>({t:n.title,u:n.url,s:n.source_info?.name||n.source,ts:n.published_on*1000}))),
+ ...RSS.map(u=>fetch("https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent(u)).then(r=>r.json()).then(d=>d.items.map(n=>({t:n.title,u:n.link,s:d.feed.title.replace(/ -.*$/,"").trim(),ts:Date.parse(n.pubDate.replace(" ","T")+"Z")}))))];
+ const all=(await Promise.allSettled(jobs)).filter(x=>x.status==="fulfilled").flatMap(x=>x.value).filter(n=>n.t&&n.u&&n.ts),seen=new Set();
+ news=all.sort((a,b)=>b.ts-a.ts).filter(n=>{const k=n.t.toLowerCase().slice(0,40);if(seen.has(k))return false;seen.add(k);return true}).slice(0,60);
+ const cs=$("nS").value;$("nS").innerHTML='<option value="">Semua sumber</option>'+[...new Set(news.map(n=>n.s))].map(s=>`<option ${s===cs?"selected":""}>${esc(s)}</option>`).join("");
+ $("newsUpd").textContent="Update "+new Date().toLocaleTimeString("id-ID",{timeZone:"Asia/Jakarta"});renderNews();
+}
+const BULL=/(surge|rally|soar|jump|gain|bull|record|approv|adopt|inflow|breakout|rebound)/i,BEAR=/(crash|plunge|drop|fall|bear|hack|exploit|ban|lawsuit|sell-?off|liquidat|fraud|decline|outflow)/i;
+const sentTag=t=>BULL.test(t)&&!BEAR.test(t)?'<span class="badge text-bg-success">Positif</span>':BEAR.test(t)&&!BULL.test(t)?'<span class="badge text-bg-danger">Negatif</span>':'<span class="badge text-bg-secondary">Netral</span>';
+const nItem=n=>`<div class="nw"><a href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.t)}</a>${Date.now()-n.ts<1800000?' <span class="badge text-bg-warning">Baru</span>':''}<div class="small mut">${sentTag(n.t)} ${esc(n.s)} &middot; ${ago(n.ts)} lalu</div></div>`;
+function renderNews(){
+ $("hN").innerHTML=news.slice(0,6).map(nItem).join("")||'<p class="mut py-2">Memuat berita...</p>';
+ const q=$("nQ").value.toLowerCase(),s=$("nS").value;
+ $("newsList").innerHTML=news.filter(n=>(!s||n.s===s)&&(!q||n.t.toLowerCase().includes(q))).map(nItem).join("")||'<p class="mut py-3 mb-0">Tidak ada berita.</p>';
+}
+$("nQ").oninput=renderNews;$("nS").onchange=renderNews;setInterval(renderNews,30000);
+
+/* ===== FITUR TAMBAHAN ===== */
+function tvw(el,src,cfg){el.innerHTML="";const w=document.createElement("div");w.className="tradingview-widget-container";w.style.height="100%";const i=document.createElement("div");i.className="tradingview-widget-container__widget";i.style.height="100%";w.appendChild(i);const s=document.createElement("script");s.src="https://s3.tradingview.com/external-embedding/"+src;s.async=true;s.text=JSON.stringify(cfg);w.appendChild(s);el.appendChild(w)}
+const STB=new Set(["USDT","USDC","DAI","FDUSD","USDE","USDS","BUSD","TUSD","PYUSD","USD1","WBTC","STETH","WSTETH","WETH","WEETH"]);
+async function scan(){
+ const tf=$("scTf").value,top=list().sort((a,b)=>a[1].rank-b[1].rank).map(x=>x[0]).filter(s=>!STB.has(s)).slice(0,30),q=[...top];
+ scanRes=[];let n=0;$("scGo").disabled=true;
+ await Promise.all([0,1,2].map(async()=>{while(q.length){const s=q.shift();try{scanRes.push(await TA(s,tf))}catch(e){}$("scSt").textContent=" Memindai "+(++n)+"/"+top.length;rScan()}}));
+ $("scSt").textContent=" Selesai, "+scanRes.length+" koin terbaca";$("scGo").disabled=false;
+}
+function rScan(){const f=$("scF").value;
+ const a=scanRes.filter(x=>!f||(f==="bull"&&x.sc>=1)||(f==="bear"&&x.sc<=-1)||(f==="os"&&x.R<30)||(f==="ob"&&x.R>70)).sort((x,y)=>y.sc-x.sc);
+ $("scTb").innerHTML=a.map(x=>`<tr data-s="${esc(x.s)}"><td>${esc(x.s)}</td><td class="${x.sc>0?'g':x.sc<0?'r':''}">${x.lab}</td><td class="text-end">${x.R.toFixed(1)}</td><td class="text-end">$${fmt(x.p)}</td><td class="text-end">$${fmt(x.sup)}</td><td class="text-end">$${fmt(x.res)}</td></tr>`).join("")||'<tr><td colspan="6" class="mut text-center py-4">Belum ada hasil. Tekan tombol Pindai.</td></tr>'}
+async function loadFut(){loadLsr();
+ try{const j=await (await fetch("https://api.bybit.com/v5/market/tickers?category=linear")).json();
+  const a=j.result.list.filter(t=>t.symbol.endsWith("USDT")).sort((x,y)=>y.openInterestValue-x.openInterestValue).slice(0,40);
+  $("fuTb").innerHTML=a.map(t=>{const f=t.fundingRate*100;return `<tr data-s="${esc(t.symbol.slice(0,-4))}"><td>${esc(t.symbol)}</td><td class="text-end">$${fmt(+t.lastPrice)}</td><td class="text-end">${pc(t.price24hPcnt*100)}</td><td class="text-end ${f>0.03?'r':f<-0.03?'g':''}">${f.toFixed(4)}%</td><td class="text-end">$${(t.openInterestValue/1e6).toFixed(1)}M</td></tr>`}).join("")}
+ catch(e){$("fuTb").innerHTML='<tr><td colspan="5" class="mut text-center py-4">Data futures tidak bisa dimuat.</td></tr>'}
+}
+async function loadTrend(){try{const d=await (await fetch("https://api.coingecko.com/api/v3/search/trending")).json();
+ $("trend").innerHTML=d.coins.slice(0,10).map(({item:i})=>`<span class="chip" style="cursor:pointer" data-s="${esc(i.symbol.toUpperCase())}"><img src="${esc(i.thumb)}" style="width:16px;height:16px;border-radius:50%;margin-right:6px" alt="">${esc(i.symbol)}</span>`).join("")}catch(e){$("trend").innerHTML='<span class="mut">Tidak tersedia</span>'}}
+function rBrief(){const b=coins.get("BTC"),e=coins.get("ETH");if(!b||!glob)return;
+ const t=list().filter(([s,c])=>c.rank<=100),up=t.filter(([s,c])=>c.change>0).length;
+ $("brief").innerHTML=`Bitcoin di <b>$${fmt(b.price)}</b> (${pc(b.change)} 24 jam)${e?`, Ethereum <b>$${fmt(e.price)}</b> (${pc(e.change)})`:""}. Total market cap <b>$${(glob.total_market_cap.usd/1e12).toFixed(2)}T</b> dengan dominasi BTC ${glob.market_cap_percentage.btc.toFixed(1)}%. ${up} dari ${t.length} koin teratas naik hari ini.${fng?` Fear and Greed Index ${fng.value} (${esc(fng.value_classification)}).`:""}`}
+
+/* ===== BAHASA ===== */
+const C2L="AD:ca,AE:ar,AF:ps,AF:fa,AG:en,AL:sq,AM:hy,AO:pt,AR:es,AT:de,AU:en,AZ:az,BA:bs,BB:en,BD:bn,BE:nl,BE:fr,BF:fr,BG:bg,BH:ar,BI:fr,BJ:fr,BN:ms,BO:es,BR:pt,BS:en,BT:en,BW:en,BY:be,BZ:en,CA:en,CA:fr,CD:fr,CF:fr,CG:fr,CH:de,CH:fr,CH:it,CI:fr,CL:es,CM:fr,CN:zh-CN,CO:es,CR:es,CU:es,CV:pt,CY:el,CZ:cs,DE:de,DJ:fr,DK:da,DM:en,DO:es,DZ:ar,EC:es,EE:et,EG:ar,ER:ar,ES:es,ES:ca,ES:eu,ES:gl,ET:am,FI:fi,FJ:en,FM:en,FR:fr,FR:co,GA:fr,GB:en,GB:cy,GB:gd,GD:en,GE:ka,GH:en,GM:en,GN:fr,GQ:es,GR:el,GT:es,GW:pt,GY:en,HK:zh-TW,HN:es,HR:hr,HT:ht,HU:hu,ID:id,ID:jw,ID:su,IE:ga,IL:iw,IL:yi,IN:hi,IN:bn,IN:ta,IN:te,IN:mr,IN:gu,IN:kn,IN:ml,IN:pa,IQ:ar,IQ:ku,IR:fa,IS:is,IT:it,JM:en,JO:ar,JP:ja,KE:sw,KG:ky,KH:km,KI:en,KM:ar,KN:en,KP:ko,KR:ko,KW:ar,KZ:kk,LA:lo,LB:ar,LC:en,LI:de,LK:si,LR:en,LS:st,LT:lt,LU:lb,LU:fr,LV:lv,LY:ar,MA:ar,MC:fr,MD:ro,ME:sr,MG:mg,MH:en,MK:mk,ML:fr,MM:my,MN:mn,MO:zh-TW,MR:ar,MT:mt,MU:en,MV:en,MW:ny,MX:es,MY:ms,MZ:pt,NA:en,NE:fr,NG:en,NG:ha,NG:yo,NG:ig,NI:es,NL:nl,NL:fy,NO:no,NP:ne,NR:en,NZ:en,NZ:mi,OM:ar,PA:es,PE:es,PG:en,PH:tl,PH:ceb,PK:ur,PK:sd,PL:pl,PS:ar,PT:pt,PW:en,PY:es,QA:ar,RO:ro,RS:sr,RU:ru,RW:en,SA:ar,SB:en,SC:en,SD:ar,SE:sv,SG:en,SI:sl,SK:sk,SL:en,SM:it,SN:fr,SO:so,SR:nl,SS:en,ST:pt,SV:es,SY:ar,SZ:en,TD:fr,TG:fr,TH:th,TJ:tg,TL:pt,TM:ru,TN:ar,TO:en,TR:tr,TR:ku,TT:en,TV:en,TW:zh-TW,TZ:sw,UA:uk,UG:en,US:en,US:es,US:haw,UY:es,UZ:uz,VA:it,VA:la,VC:en,VE:es,VN:vi,VU:en,WS:sm,XK:sq,YE:ar,ZA:en,ZA:af,ZA:zu,ZA:xh,ZM:en,ZW:en,ZW:sn";
+const LSUP=[...new Set(C2L.split(",").map(x=>x.split(":")[1]))];
+let curLang=ls("lang")||"id";
+const ic=c=>({iw:"he",jw:"jv",tl:"fil"})[c]||c;
+const wikiLang=()=>({"zh-CN":"zh","zh-TW":"zh",iw:"he",jw:"jv"})[curLang]||curLang;
+function lname(c,inL){try{return new Intl.DisplayNames([ic(inL)],{type:"language"}).of(ic(c))}catch(e){return c}}
+function rLang(){
+ const q=($("lgQ").value||"").toLowerCase();let rn;try{rn=new Intl.DisplayNames([ic(curLang)],{type:"region"})}catch(e){rn=new Intl.DisplayNames(["id"],{type:"region"})}
+ const rows=C2L.split(",").map(x=>{const [cc,l]=x.split(":");let n;try{n=rn.of(cc)}catch(e){n=cc}return {n,l,ln:lname(l,curLang),nat:lname(l,l)}}).sort((a,b)=>a.n.localeCompare(b.n,ic(curLang))||a.ln.localeCompare(b.ln));
+ let h="",L="";
+ rows.filter(r=>!q||(r.n+" "+r.ln+" "+r.nat).toLowerCase().includes(q)).forEach(r=>{const f=r.n[0].toUpperCase();if(f!==L){L=f;h+=`<div class="px-3 pt-3 pb-1 mut small fw-semibold">${esc(f)}</div>`}
+  h+=`<div class="d-flex justify-content-between align-items-center px-3 py-2 lgrow" data-l="${r.l}" style="cursor:pointer;border-top:1px solid var(--ln)"><span>${esc(r.n)}</span><span class="mut text-end">${esc(r.ln)}${r.nat!==r.ln?" &middot; "+esc(r.nat):""}${r.l===curLang?' <b class="g">aktif</b>':''}</span></div>`});
+ $("lgList").innerHTML=h||'<p class="mut p-3 mb-0">Tidak ditemukan.</p>';
+}
+function applyLang(c,n=0){const s=document.querySelector("select.goog-te-combo");if(s){s.value=c;s.dispatchEvent(new Event("change"))}else if(n<40)setTimeout(()=>applyLang(c,n+1),500)}
+function setLang(c){curLang=c;ls("lang",c);$("langBtn").textContent=c.split("-")[0].toUpperCase();applyLang(c);if(cur==="bahasa")rLang()}
+document.addEventListener("click",e=>{const r=e.target.closest(".lgrow");if(r)setLang(r.dataset.l)});
+let LN=null;
+function langByName(q){
+ if(!LN){LN={};LSUP.forEach(c=>["id","en"].forEach(l=>{const n=(lname(c,l)||"").toLowerCase();if(n&&n!==c.toLowerCase())LN[n]=c}));
+  Object.assign(LN,{mandarin:"zh-CN",chinese:"zh-CN",cina:"zh-CN",china:"zh-CN",indonesia:"id",indonesian:"id",korea:"ko",arab:"ar",inggris:"en",english:"en"})}
+ const w=" "+q.replace(/[^\p{L}\s-]/gu," ").replace(/\s+/g," ")+" ";
+ for(const n of Object.keys(LN).sort((a,b)=>b.length-a.length))if(w.includes(" "+n+" "))return LN[n];
+ return null;
+}
+function initLang(){
+ $("langBtn").textContent=curLang.split("-")[0].toUpperCase();$("lgQ").oninput=rLang;$("lgReset").onclick=()=>setLang("id");
+ window.gtInit=()=>{new google.translate.TranslateElement({pageLanguage:"id",includedLanguages:LSUP.join(","),autoDisplay:false},"gtEl");if(curLang!=="id")applyLang(curLang)};
+ const g=document.createElement("script");g.src="https://translate.google.com/translate_a/element.js?cb=gtInit";document.head.appendChild(g);
+}
+
+/* ===== BERANDA & FUTURES TAMBAHAN ===== */
+async function loadFgH(){try{const d=(await (await fetch("https://api.alternative.me/fng/?limit=30")).json()).data.reverse();
+ $("fgH").innerHTML=d.map(x=>{const v=+x.value;return `<div title="${v} ${esc(x.value_classification)}" style="flex:1;height:${Math.max(6,v)}%;background:${v>=55?'var(--g)':v<=45?'var(--r)':'var(--ac)'};border-radius:2px;opacity:.85"></div>`}).join("")}catch(e){}}
+async function loadBtcNet(){try{
+ const [h,f]=await Promise.all([fetch("https://mempool.space/api/blocks/tip/height").then(r=>r.text()),fetch("https://mempool.space/api/v1/fees/recommended").then(r=>r.json())]);
+ const H=+h,next=Math.ceil((H+1)/210000)*210000,left=next-H,days=left*10/1440,dt=new Date(Date.now()+days*864e5);
+ $("btcNet").innerHTML=`Tinggi blok: <b>${H.toLocaleString("id-ID")}</b><br>Halving berikutnya: blok <b>${next.toLocaleString("id-ID")}</b> (${left.toLocaleString("id-ID")} blok lagi)<br>Perkiraan: <b>${dt.toLocaleDateString("id-ID",{month:"long",year:"numeric"})}</b> (sekitar ${Math.round(days)} hari)<br>Biaya transaksi: cepat <b>${f.fastestFee}</b>, sedang <b>${f.halfHourFee}</b>, hemat <b>${f.economyFee}</b> sat/vB`}catch(e){$("btcNet").textContent="Data jaringan tidak tersedia."}}
+async function loadLsr(){const r=await Promise.all(["BTC","ETH","SOL"].map(s=>fetch(`https://api.bybit.com/v5/market/account-ratio?category=linear&symbol=${s}USDT&period=1h&limit=1`).then(r=>r.json()).then(j=>{const x=j.result.list[0];return `<div class="col-4"><div class="pn p-3"><div class="mut small">${s} Long / Short</div><b class="g">${(x.buyRatio*100).toFixed(0)}%</b> / <b class="r">${(x.sellRatio*100).toFixed(0)}%</b></div></div>`}).catch(()=>"")));$("lsr").innerHTML=r.join("")}
+
+/* ===== EDUKASI & KNOWLEDGE ===== */
+const STRAT={
+ cara:"<b>Cara menganalisis koin</b><br>1. Tentukan tren besar di TF 4h/1d: harga di atas atau di bawah EMA50.<br>2. Tandai support dan resistance terdekat.<br>3. Cek momentum dengan RSI dan MACD.<br>4. Lihat volume, dominasi BTC, dan Fear &amp; Greed.<br>5. Baca berita yang bisa menggerakkan harga.<br>6. Tentukan entry, stop loss, dan target dengan RR minimal 1:2.<br>Untuk hasil otomatis, ketik misalnya: <i>analisa BTC</i>.",
+ dca:"<b>DCA (Dollar Cost Averaging)</b><br>Beli dengan nominal tetap secara berkala tanpa menebak harga. Cocok untuk pemula dan jangka panjang. Pilih aset yang kuat, tentukan total dana dan jangka waktunya.",
+ grid:"<b>Grid Trading</b><br>Pasang order beli di bawah dan jual di atas harga dalam rentang tertentu. Cocok untuk pasar sideways. Risiko: harga keluar dari rentang, jadi tentukan batas bawah.",
+ swing:"<b>Swing Trading</b><br>Tahan posisi beberapa hari sampai minggu mengikuti tren. Gunakan TF 4h/1d, masuk saat pullback ke EMA20/50 atau support, konfirmasi dengan RSI dan MACD. Target RR minimal 1:2.",
+ scalp:"<b>Scalping</b><br>Trade cepat di TF 1 sampai 15 menit untuk profit kecil berulang. Butuh disiplin, fee rendah, dan eksekusi cepat. Risikonya tinggi untuk pemula.",
+ breakout:"<b>Breakout</b><br>Masuk saat harga menembus resistance dengan volume besar dan candle close di atasnya. Stop loss di bawah level breakout. Waspadai false breakout, tunggu retest bila perlu.",
+ hodl:"<b>HODL (investasi jangka panjang)</b><br>Beli aset yang fundamentalnya kuat dan simpan bertahun-tahun. Diversifikasi, simpan di wallet aman, dan abaikan gejolak harian.",
+ risk:"<b>Manajemen risiko</b><br>Risiko 1 sampai 2 persen modal per trade. Selalu pakai stop loss. Target RR minimal 1:2. Hindari all-in dan leverage tinggi. Jangan mengejar harga yang sudah pump. Hitung ukuran posisi di menu Kalkulator."
+};
+const GLOS={
+ blockchain:"<b>Blockchain</b><br>Buku besar digital terdistribusi yang mencatat transaksi dalam blok-blok yang saling terhubung. Data yang sudah tercatat sangat sulit diubah.",
+ defi:"<b>DeFi</b><br>Layanan keuangan berbasis smart contract, seperti pinjam-meminjam dan tukar aset, tanpa perantara bank. Risikonya bug kontrak dan penipuan.",
+ nft:"<b>NFT</b><br>Token unik di blockchain yang mewakili kepemilikan aset digital seperti karya seni atau item game.",
+ altcoin:"<b>Altcoin</b><br>Semua koin selain Bitcoin. Umumnya lebih fluktuatif dan berisiko lebih tinggi.",
+ "market cap":"<b>Market cap</b><br>Harga dikali jumlah koin yang beredar. Dipakai untuk membandingkan ukuran proyek, bukan jumlah uang yang masuk.",
+ wallet:"<b>Wallet</b><br>Alat penyimpan kunci akses aset crypto. Hot wallet terhubung internet (praktis), cold wallet offline (lebih aman).",
+ "seed phrase":"<b>Seed phrase</b><br>Rangkaian kata pemulih wallet. Siapa pun yang memegangnya menguasai asetmu. Jangan pernah dibagikan atau difoto.",
+ "gas fee":"<b>Gas fee</b><br>Biaya transaksi di jaringan blockchain seperti Ethereum, naik saat jaringan ramai.",
+ whale:"<b>Whale</b><br>Pemilik koin dalam jumlah sangat besar yang pergerakannya bisa mempengaruhi harga.",
+ fomo:"<b>FOMO</b><br>Takut ketinggalan kenaikan harga sehingga membeli di harga tinggi tanpa rencana. Salah satu penyebab utama kerugian trader pemula.",
+ fud:"<b>FUD</b><br>Ketakutan, ketidakpastian, dan keraguan yang disebarkan lewat kabar negatif, kadang benar, kadang dilebih-lebihkan.",
+ funding:"<b>Funding rate</b><br>Biaya berkala antara trader long dan short di kontrak perpetual. Positif besar artinya long ramai, negatif besar artinya short ramai. Lihat menu Futures.",
+ "open interest":"<b>Open interest</b><br>Total nilai kontrak futures yang masih terbuka. Naik bersama harga biasanya tanda tren didukung posisi baru.",
+ rsi:"<b>RSI</b><br>Mengukur momentum dari 0 sampai 100. Di atas 70 dianggap jenuh beli, di bawah 30 jenuh jual. Jangan dipakai sebagai sinyal tunggal.",
+ macd:"<b>MACD</b><br>Selisih EMA12 dan EMA26. Histogram positif menandakan momentum naik, negatif menandakan turun.",
+ ema:"<b>EMA</b><br>Rata-rata harga yang lebih peka terhadap harga terbaru. EMA20 di atas EMA50 biasanya tanda tren naik.",
+ support:"<b>Support dan resistance</b><br>Support adalah area tempat harga sering tertahan turun, resistance area tempat harga sering tertahan naik. Jika tertembus, perannya biasanya berbalik.",
+ resistance:"<b>Resistance</b><br>Area harga yang sering menahan kenaikan. Jika berhasil ditembus dengan volume, area itu bisa menjadi support baru.",
+ leverage:"<b>Leverage</b><br>Memperbesar posisi dengan dana pinjaman. Untung dan rugi ikut berlipat dan posisi mudah terlikuidasi. Pemula sebaiknya menghindarinya atau memakai maksimal 3x.",
+ likuidasi:"<b>Likuidasi</b><br>Posisi ditutup paksa karena margin tidak cukup menahan kerugian. Gunakan stop loss dan leverage rendah.",
+ spot:"<b>Spot dan futures</b><br>Spot adalah membeli aset sungguhan. Futures adalah kontrak derivatif yang bisa long atau short dengan leverage, risikonya lebih tinggi.",
+ dominasi:"<b>Dominasi BTC</b><br>Porsi market cap BTC terhadap total pasar. Jika naik, dana cenderung ke BTC. Jika turun, altcoin biasanya mendapat ruang.",
+ "stop loss":"<b>Stop loss</b><br>Order otomatis yang menutup posisi di batas rugi yang kamu tentukan. Letakkan di level yang logis, misalnya di bawah support, bukan angka sembarang.",
+ halving:"<b>Halving</b><br>Peristiwa sekitar empat tahun sekali ketika reward penambang Bitcoin dipotong setengah sehingga laju pasokan baru menurun.",
+ staking:"<b>Staking</b><br>Mengunci koin di jaringan proof-of-stake untuk membantu validasi dan mendapat imbalan. Risikonya harga turun dan dana terkunci.",
+ airdrop:"<b>Airdrop</b><br>Pembagian token gratis dari proyek ke pengguna tertentu. Waspadai penipuan, jangan pernah membagikan seed phrase."
+};
+$("eduBox").innerHTML=[...Object.values(STRAT),...Object.values(GLOS)].map(t=>{const i=t.indexOf("<br>");return `<details class="pn"><summary>${t.slice(3,t.indexOf("</b>"))}</summary><div class="mt-2 mut">${t.slice(i+4)}</div></details>`}).join("");
+
+/* ===== ASISTEN ===== */
+const STOP=new Set("ada dan apa ini itu yang atau dari buat bisa mau cara kok gak nih aja lah sih tidak bukan saya aku kamu dong bagi sama pada untuk dengan the and for how what you can are".split(" "));
+function findCoin(raw){
+ const q=raw.toLowerCase();
+ for(const [s,c] of coins)if(c.name&&c.name.length>3&&new RegExp("\\b"+c.name.toLowerCase().replace(/[^a-z0-9 ]/g,"")+"\\b").test(q))return s;
+ for(const t of raw.split(/[^A-Za-z0-9]+/)){const u=t.toUpperCase();if(!coins.has(u))continue;
+  if(t===u&&t.length>=2)return u;if(t.length>=3&&!STOP.has(t.toLowerCase()))return u}
+ return null;
+}
+function tryMath(q){const e=q.replace(/\b(berapa|hitung|calculate|hasil)\b|=|\?/gi,"").replace(/[x×]/gi,"*").replace(/÷/g,"/").replace(/\^/g,"**").replace(/,/g,".").trim();
+ if(/^[\d\s+\-*/().%]+$/.test(e)&&/\d/.test(e)&&/[+\-*/%]/.test(e)){try{const v=Function('"use strict";return('+e+')')();if(isFinite(v))return v}catch(x){}}return null}
+async function wiki(q){
+ const t=q.replace(/\b(apa itu|apa|siapa|itu|adalah|jelaskan|tolong|dong|sih|apakah|bagaimana|kenapa|mengapa|what is|who is|ceritakan|tentang)\b/gi,"").replace(/[?!.]/g,"").trim()||q;
+ for(const l of [...new Set([wikiLang(),"id","en"])]){try{
+  const s=await (await fetch(`https://${l}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(t)}&srlimit=1&format=json&origin=*`)).json();
+  const h=s.query.search[0];if(!h)continue;
+  const r=await (await fetch(`https://${l}.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(h.title)}`)).json();
+  let x=r.extract;if(!x)continue;if(x.length>420){x=x.slice(0,420);const i=x.lastIndexOf(". ");if(i>150)x=x.slice(0,i+1)}
+  return `<b>${esc(r.title)}</b><br>${esc(x)}<br><small class="mut">Sumber: <a href="${esc(r.content_urls.desktop.page)}" target="_blank" rel="noopener">Wikipedia (${l})</a></small>`}catch(e){}}
+ return null;
+}
+const DISC="<br><small class='mut'>Bukan saran keuangan. Lakukan riset sendiri.</small>";
+const FREE_AI=true; // jawaban AI umum via layanan pihak ketiga (Pollinations). Ubah ke false untuk mematikan.
+const hist=[];let lastI=null;
+const act=(t,x)=>`<button type="button" class="ch" data-ask="${esc(x)}">${esc(t)}</button>`,cht=s=>`<button type="button" class="ch" data-s="${esc(s)}">Buka chart ${esc(s)}</button>`;
+function findCoins(raw){
+ const q=raw.toLowerCase(),m=[];
+ for(const [s,c] of coins){if(!c.name||c.name.length<4)continue;const n=c.name.toLowerCase().replace(/[^a-z0-9 ]/g,"");if(n&&new RegExp("\\b"+n+"\\b").test(q))m.push([s,n])}
+ const out=m.filter(([s,n])=>!m.some(([s2,n2])=>n2!==n&&n2.includes(n))).map(x=>x[0]);
+ for(const t of raw.split(/[^A-Za-z0-9]+/)){const u=t.toUpperCase();if(!coins.has(u)||out.includes(u))continue;if((t===u&&t.length>=2)||(t.length>=3&&!STOP.has(t.toLowerCase())))out.push(u)}
+ return out;
+}
+async function llm(raw){
+ const snap=["BTC","ETH","SOL","XRP","BNB"].filter(s=>coins.has(s)).map(s=>s+" $"+fmt(coins.get(s).price)+" ("+coins.get(s).change.toFixed(1)+"%)").join(", ");
+ const sys="Kamu asisten situs HyaCrypto (analisis dan berita crypto). Jawab dengan bahasa yang dipakai pengguna, singkat dan jelas (maksimal sekitar 120 kata), tanpa emoji. Untuk topik crypto beri edukasi netral, jangan beri kepastian harga atau saran keuangan. Data pasar live: "+snap+(fng?". Fear and Greed "+fng.value:"")+".";
+ const ac=new AbortController(),t=setTimeout(()=>ac.abort(),20000);
+ try{const r=await fetch("https://text.pollinations.ai/openai",{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({model:"openai",messages:[{role:"system",content:sys},...hist.slice(-6),{role:"user",content:raw}]})});
+  const j=await r.json();const x=j.choices?.[0]?.message?.content;return x?x.trim():null}catch(e){return null}finally{clearTimeout(t)}
+}
+async function brain(raw){
+ const q=raw.toLowerCase().trim(),cs=findCoins(raw),c=cs[0],has=(...w)=>w.some(x=>q.includes(x)),co=c&&coins.get(c),wc=q.split(/\s+/).length;
+ if(c)last=c;
+ if(AI_ENDPOINT){try{const r=await (await fetch(AI_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:raw,context:{prices:list().slice(0,20).map(([s,x])=>[s,x.price,x.change]),fng:fng?.value}})})).json();if(r.reply)return esc(r.reply).replace(/\n/g,"<br>")}catch(e){}}
+ /* bahasa */
+ if(/\b(pake|pakai|gunakan|ganti|ubah|switch|change|use|speak|ngomong|bicara|translate|terjemah\w*|bahasa|language)\b/.test(q)&&!/\b(apa itu|siapa|sejarah|history|what is)\b/.test(q)){
+  if(has("daftar bahasa","semua bahasa","bahasa apa saja","language list","list of language"))return 'Tersedia lebih dari 100 bahasa, diurutkan A-Z menurut nama negara.<br><button type="button" class="ch" data-go="bahasa">Buka daftar bahasa</button>';
+  const l=langByName(q);if(l){setLang(l);return `Bahasa diganti ke <b>${esc(lname(l,"id"))}</b>. Seluruh halaman diterjemahkan otomatis oleh Google Translate, jadi hasilnya mungkin tidak sempurna.`}
+ }
+ const m=tryMath(q);if(m!==null)return `Hasilnya <b>${+m.toFixed(8)}</b>`;
+ if(/^(h+a+l+o+|h+a+i+|hi+|hello+|hey+|pagi|siang|sore|malam|assalam\w*|permisi)\b/.test(q))return "Halo, ada yang bisa dibantu? Kamu bisa tanya harga, analisis koin, strategi trading, atau hal umum lainnya.";
+ if(has("terima kasih","makasih","thanks","thank you","thx"))return "Sama-sama. Kalau ada yang mau ditanyakan lagi, silakan.";
+ if(has("siapa kamu","kamu siapa","siapa namamu","kamu itu apa","who are you"))return "Saya asisten HyaCrypto. Saya membaca data pasar langsung, menghitung indikator, menjelaskan strategi, mengganti bahasa halaman, dan menjawab pertanyaan umum.";
+ if(has("bisa apa","fitur apa","bantuan","help"))return "Saya bisa membantu:<br>- Harga dan analisis teknikal, contoh: analisa ETH 4h<br>- Bandingkan koin, contoh: bandingkan BTC ETH SOL<br>- Cari koin oversold atau paling bullish<br>- Hitung posisi: hitung posisi modal 1000 risiko 1% entry 60000 sl 58500<br>- Berita per koin, Fear &amp; Greed, top gainer dan loser<br>- Istilah dan strategi trading<br>- Ganti bahasa: pakai bahasa Inggris<br>- Pertanyaan umum";
+ if(/^(ok|oke|okay|siap|mantap|sip|iya|ya|baik|bagus)\b/.test(q))return "Siap. Ada lagi yang ingin ditanyakan?";
+ if(/^(bye|dadah|sampai jumpa)\b/.test(q))return "Sampai jumpa. Semoga trading-nya disiplin.";
+ if(has("apa kabar","how are you"))return "Baik. Kamu sendiri? Mau saya rangkum kondisi pasar hari ini?";
+ if(has("jam berapa","tanggal berapa","hari apa","waktu sekarang","what time"))return new Date().toLocaleString("id-ID",{dateStyle:"full",timeStyle:"short",timeZone:"Asia/Jakarta"})+" WIB";
+ if(/(cara|bagaimana|gimana|how to|tutorial|belajar|panduan).*(analisa|analisis|analyze|analysis|baca chart|membaca chart)/.test(q))return STRAT.cara;
+ const nm=q.match(/([\d]+(?:[.,]\d+)?)\s*([a-z]{2,10})\b/i);
+ if(nm&&coins.has(nm[2].toUpperCase())&&!has("analisa","analisis")){const x=coins.get(nm[2].toUpperCase()),a=+nm[1].replace(",",".");return `${a} ${nm[2].toUpperCase()} = <b>$${fmt(a*x.price)}</b> atau <b>Rp${Math.round(a*x.price*fx).toLocaleString("id-ID")}</b>`}
+ if(cs.length>=2&&/(bandingkan|banding|\bvs\b|versus|compare|lebih bagus|mana yang)/.test(q)){
+  const rows=await Promise.all(cs.slice(0,3).map(async s=>{const x=coins.get(s);let t="-";try{const k=await TA(s,"1h");t=`<span class="${k.sc>0?'g':k.sc<0?'r':''}">${k.lab}</span>, RSI ${k.R.toFixed(0)}`}catch(e){}return `<b>${esc(s)}</b>: $${fmt(x.price)} (${pc(x.change)}), cap #${x.rank}, 1 jam: ${t}`}));
+  return "<b>Perbandingan</b><br>"+rows.join("<br>")+DISC;}
+ const nv=re=>{const r=q.match(re);return r?parseFloat(r[1].replace(/,/g,"")):0};
+ const bal=nv(/(?:modal|saldo|balance|capital)\D{0,8}([\d,]+(?:\.\d+)?)/),ent=nv(/entry\D{0,8}([\d,]+(?:\.\d+)?)/),sl=nv(/(?:\bsl\b|stop(?: loss)?)\D{0,8}([\d,]+(?:\.\d+)?)/),rk=nv(/(?:risiko|risk)\D{0,8}([\d.]+)\s*%/)||1;
+ if(bal&&ent&&sl&&ent!==sl){const risk=bal*rk/100,d=Math.abs(ent-sl),qty=risk/d,dir=ent>sl?1:-1;return `<b>Ukuran posisi</b><br>Arah: ${dir>0?"Long":"Short"}<br>Risiko: <b>$${risk.toFixed(2)}</b> (${rk}% dari $${fmt(bal)})<br>Ukuran: <b>${fmt(qty)}</b> koin ($${(qty*ent).toFixed(2)})<br>TP 1:2: <b>$${fmt(ent+dir*2*d)}</b>, TP 1:3: <b>$${fmt(ent+dir*3*d)}</b>`+DISC}
+ if(has("hitung posisi","position size"))return "Contoh format: <i>hitung posisi modal 1000 risiko 1% entry 60000 sl 58500</i>";
+ let I=null;
+ if(/\b(analisa|analisis|analysis|analyze|analyse|prediksi|sinyal|signal|entry|target|prospek|rekomendasi|forecast|outlook)\b/.test(q)||/(layak|boleh|waktunya|saatnya|sebaiknya)\s+(beli|jual)|should i (buy|sell)/.test(q))I="ta";
+ else if(/\b(harga|price|berapa|kurs)\b/.test(q)||q.includes("how much"))I="price";
+ else if(cs.length&&wc<=3&&!/\b(apa|siapa|kenapa|mengapa|bagaimana|what|who|why|how)\b/.test(q))I=wc<=2&&!lastI?"price":(lastI||"price");
+ if(I==="ta"){lastI="ta";const s=c||last||sel;
+  try{const tf=has("4h","4 jam")?"4h":has("harian","1d","daily")?"1d":has("15m","15 menit","scalp")?"15m":"1h";const a=await TA(s,tf);
+   return `<b>Analisis ${esc(s)} (${tf})</b><ul class="mb-1 ps-3 mt-1">${taHTML(a)}</ul>`+DISC+`<div>${cht(s)}${act("Berita "+s,"berita "+s)}${act("Bandingkan dengan ETH","bandingkan "+s+" ETH")}</div>`}
+  catch(e){return `Data harga ${esc(s)} sedang tidak bisa diambil dari Binance, Bybit, maupun OKX. Cek simbolnya, atau coba lagi sebentar.`}}
+ for(const k of Object.keys(GLOS))if(new RegExp("\\b"+k+"\\b").test(q))return GLOS[k];
+ for(const [k,re] of [["dca",/\bdca\b/],["grid",/\bgrid\b/],["swing",/\bswing\b/],["scalp",/scalp/],["breakout",/breakout/],["hodl",/hodl|jangka panjang/],["risk",/risk|risiko|manajemen|ukuran posisi/]])if(re.test(q))return STRAT[k]+DISC;
+ if(has("strategi","strategy","pemula"))return "Pilih strategi sesuai gaya trading:<br>DCA atau HODL untuk jangka panjang, Swing untuk mengikuti tren harian sampai mingguan, Grid untuk pasar sideways, Breakout untuk level kunci, dan Scalping untuk trading cepat. Sebut nama strateginya untuk penjelasan lengkap."+DISC;
+ const top=a=>a.slice(0,5).map(([s,x])=>`${esc(s)} $${fmt(x.price)} ${pc(x.change)}`).join("<br>"),big=list().filter(([s,x])=>x.rank<=150);
+ if(/oversold|overbought|jenuh (jual|beli)|paling bullish|paling bearish|koin terkuat|strongest/.test(q)){
+  if(!scanRes.length)await scan();
+  const os=/oversold|jenuh jual/.test(q),ob=/overbought|jenuh beli/.test(q),be=/bearish/.test(q);let a=scanRes.slice();
+  a=os?a.filter(x=>x.R<35).sort((x,y)=>x.R-y.R):ob?a.filter(x=>x.R>65).sort((x,y)=>y.R-x.R):be?a.sort((x,y)=>x.sc-y.sc):a.sort((x,y)=>y.sc-x.sc);
+  return a.length?`<b>${os?"RSI rendah (jenuh jual)":ob?"RSI tinggi (jenuh beli)":be?"Paling bearish":"Paling bullish"} di 30 koin teratas (1 jam)</b><br>`+a.slice(0,5).map(x=>`${esc(x.s)}: ${x.lab}, RSI ${x.R.toFixed(0)}`).join("<br>")+DISC+'<div><button type="button" class="ch" data-go="scan">Buka Pemindai</button></div>':"Tidak ada koin yang memenuhi kriteria saat ini."}
+ if(has("gainer","naik hari","paling naik","top gain"))return "<b>Top gainer 24 jam</b><br>"+top(big.sort((a,b)=>b[1].change-a[1].change));
+ if(has("loser","paling turun","anjlok","top lose"))return "<b>Top loser 24 jam</b><br>"+top(big.sort((a,b)=>a[1].change-b[1].change));
+ if(has("fear","greed"))return fng?`Fear &amp; Greed Index saat ini <b>${fng.value}</b> (${esc(fng.value_classification)}). ${+fng.value<=25?"Pasar sangat takut, sering jadi area akumulasi jangka panjang, tapi tetap hati-hati.":+fng.value>=75?"Pasar sangat serakah, rawan koreksi, hindari FOMO.":"Kondisinya relatif netral."}`:"Data Fear & Greed belum termuat.";
+ if(has("berita","news","kabar")){
+  let n=news;if(cs.length){const f=news.filter(x=>cs.some(s=>new RegExp("\\b"+s+"\\b","i").test(x.t)||(coins.get(s)&&x.t.toLowerCase().includes(coins.get(s).name.toLowerCase()))));if(f.length)n=f;else return `Belum ada berita terbaru yang menyebut ${esc(cs.join(", "))}. Coba <i>berita terbaru</i> untuk semua topik.`}
+  return n.length?"<b>Berita"+(cs.length?" "+esc(cs.join(", ")):" terbaru")+"</b><br>"+n.slice(0,5).map(x=>`- <a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.t)}</a> <small class="mut">(${esc(x.s)}, ${ago(x.ts)})</small>`).join("<br>"):"Berita belum termuat."}
+ if(has("kondisi pasar","market hari","pasar hari","ringkasan pasar","market today"))return glob?`Total market cap <b>$${(glob.total_market_cap.usd/1e12).toFixed(2)}T</b> (${pc(glob.market_cap_change_percentage_24h_usd)} 24 jam), dominasi BTC <b>${glob.market_cap_percentage.btc.toFixed(1)}%</b>${fng?`, Fear &amp; Greed <b>${fng.value}</b> (${esc(fng.value_classification)})`:""}.`:"Data pasar belum termuat.";
+ if(co){lastI=I||"price";return `<b>${esc(co.name)} (${c})</b><br>Harga: <b>$${fmt(co.price)}</b> (Rp${Math.round(co.price*fx).toLocaleString("id-ID")})<br>24 jam: ${pc(co.change)}<br>Market cap: $${(co.cap||0).toLocaleString("en-US")}, peringkat #${co.rank}<div>${act("Analisa "+c,"analisa "+c)}${act("Berita "+c,"berita "+c)}${cht(c)}</div>`}
+ if(/\bharga\b|\bprice\b/.test(q))return "<b>Harga utama</b><br>"+["BTC","ETH","SOL","XRP","BNB"].filter(s=>coins.has(s)).map(s=>`${s} $${fmt(coins.get(s).price)} ${pc(coins.get(s).change)}`).join("<br>");
+ const x=FREE_AI?await llm(raw):null;
+ if(x)return esc(x).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\n/g,"<br>")+'<br><small class="mut">Jawaban AI umum, bisa keliru. Bukan saran keuangan.</small>';
+ const w=await wiki(raw);
+ return w||"Maaf, saya belum menangkap maksudnya. Coba: harga BTC, analisa ETH, top gainer, strategi swing, atau pertanyaan umum seperti apa itu blockchain.";
+}
+function typeIn(el,html){
+ el.innerHTML=html;const ws=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n,tot=0;
+ while(n=w.nextNode()){ws.push([n,n.textContent]);tot+=n.textContent.length}
+ ws.forEach(x=>x[0].textContent="");const st=Math.max(2,Math.ceil(tot/110));let i=0,j=0;
+ (function s(){if(i>=ws.length)return;const [n,t]=ws[i];j+=st;n.textContent=t.slice(0,j);if(j>=t.length){i++;j=0}$("msgs").scrollTop=1e9;setTimeout(s,14)})();
+}
+function add(html,w){const d=document.createElement("div");d.className="mm "+w;d.innerHTML=html;$("msgs").appendChild(d);$("msgs").scrollTop=1e9;return d}
+function stripH(h){const d=document.createElement("div");d.innerHTML=h;return d.textContent.slice(0,600)}
+async function ask(t){t=t.trim();if(!t)return;add(esc(t),"u");$("ci").value="";
+ const d=add('<span class="ty"><i></i><i></i><i></i></span>',"b");
+ let h;try{h=await brain(t)}catch(e){h="Terjadi kendala, coba kirim ulang pertanyaannya."}
+ hist.push({role:"user",content:t},{role:"assistant",content:stripH(h)});if(hist.length>12)hist.splice(0,2);
+ await new Promise(r=>setTimeout(r,300));
+ if(curLang!=="id")d.innerHTML=h;else typeIn(d,h);$("msgs").scrollTop=1e9}
+$("cf").onsubmit=e=>{e.preventDefault();ask($("ci").value)};
+$("qc").innerHTML=["Analisa BTC","Bandingkan BTC ETH","Koin oversold","Top gainer","Cara analisa","Use English"].map(x=>`<button type="button">${x}</button>`).join("");
+$("qc").onclick=e=>{if(e.target.tagName==="BUTTON")ask(e.target.textContent)};
+$("msgs").addEventListener("click",e=>{const b=e.target.closest("[data-ask]");if(b)ask(b.dataset.ask);const g=e.target.closest("[data-go]");if(g){$("cx").click();go(g.dataset.go)}});
+$("fab").onclick=()=>{$("chat").classList.add("open");$("fab").style.display="none";$("ci").focus()};
+$("cx").onclick=()=>{$("chat").classList.remove("open");$("fab").style.display=""};
+function welcome(){add("Halo, saya asisten HyaCrypto. Tanyakan harga, analisis koin, strategi, atau hal umum. Kamu juga bisa minta ganti bahasa, contoh: <i>pakai bahasa Inggris</i>.","b")}
+$("cc").onclick=()=>{$("msgs").innerHTML="";hist.length=0;lastI=null;welcome()};
+$("mic").onclick=()=>{const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){toast("Browser tidak mendukung input suara");return}
+ const r=new R();r.lang=({id:"id-ID",en:"en-US",iw:"he-IL",jw:"jv-ID",tl:"fil-PH"})[curLang]||curLang;r.onresult=e=>ask(e.results[0][0].transcript);r.onend=()=>$("mic").textContent="Mic";$("mic").textContent="...";try{r.start()}catch(e){}};
+welcome();
+
+/* ===== INIT ===== */
+connectWS();setInterval(pollLive,4000);setTimeout(pollLive,2500);loadMeta().then(()=>{const p=coins.get("BTC")?.price;if(p){$("cEnt").value=p;$("lEnt").value=p;calc();pl()}});setInterval(loadMeta,120000);
+loadGlobal();setInterval(loadGlobal,180000);loadFng();setInterval(loadFng,600000);loadFx();loadNews();setInterval(loadNews,60000);
+loadTrend();setInterval(loadTrend,300000);loadFgH();loadBtcNet();setInterval(loadBtcNet,600000);initLang();rScan();$("scGo").onclick=scan;$("scF").onchange=rScan;
+go(location.hash.slice(1)||"home");
+</script>
+</body>
+</html>
